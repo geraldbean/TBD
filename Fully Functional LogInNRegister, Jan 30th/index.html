@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    <title>Login & Registration</title>
+</head>
+<body>
+    <!--------------------------------------Navigation Bar----------------------------------------------->
+<div class="wrapper">
+    <nav class="nav">
+        <div class="nav-logo">
+            <p>LOGO .</p>
+        </div>
+        <div class="nav-menu" id="navMenu">
+            <ul>
+                <li><a href="#" class="link active">Home</a></li>
+                <li><a href="#" class="link">Spotlight</a></li>
+                <li><a href="#" class="link">About</a></li>
+                <li><a href="#" class="link">Help</a></li>
+            </ul>
+        </div>
+        <div class="nav-button">
+            <button class="btn white-btn" id="loginBtn" onclick="login()">Sign In</button>
+            <button class="btn" id="registerBtn" onclick="register()">Sign Up</button>
+        </div>
+        <div class="nav-menu-btn">
+            <i class="bx bx-menu" onclick="myMenuFunction()"></i>
+        </div>
+    </nav>
+
+    <!----------------------------- Form box ----------------------------------->    
+    <div class="form-box">
+        <!------------------- login form -------------------------->
+        <form class="login-container" id="login">
+            <div class="top">
+                <header>Welcome Back!</header>
+            </div>
+            <div class="input-box">
+                <input type="text" class="input-field" placeholder="Username or Email" required>
+                <i class="bx bx-user"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password" id="login-password" required>
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <div class="two-col">
+                <div class="one">
+                    <input type="checkbox" id="login-check">
+                    <label for="login-check"> Remember Me</label>
+                </div>
+                <div class="two">
+                    <label><a href="#">Forgot password?</a></label>
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="submit" class="submit" value="Sign In">
+            </div>
+            <div class="top">
+                <span>Don't have a quotebook? <a href="#" onclick="register()">Sign Up</a></span>
+            </div>
+        </form>
+
+        <!------------------- registration form -------------------------->
+        <form class="register-container" id="register">
+            <div class="top">
+                <header>Start your Story</header>
+            </div>
+            <div class="two-forms">
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Firstname" required>
+                    <i class="bx bx-user"></i>
+                </div>
+                <div class="input-box">
+                    <input type="text" class="input-field" placeholder="Lastname" required>
+                    <i class="bx bx-user"></i>
+                </div>
+            </div>
+            <!---------------------------Email and Password---------------------------------------->
+            <div class="input-box">
+                <input type="email" class="input-field" placeholder="Email" required>
+                <i class="bx bx-envelope"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Password" id="register-password" required>
+                <i class="bx bx-lock-alt"></i>
+            </div>
+            <!--------------------Confirm Password------------------------------------->
+            <div class="input-box">
+                <input type="password" class="input-field" placeholder="Confirm Password" id="confirm-password" required>
+                <i class="bx bx-lock-alt"></i>
+            </div>
+                <span id="password-error">Please make sure your password match</span>
+            <div class="two-col">
+                <div class="one">
+                    <input type="checkbox" id="terms-check" required>
+                    <label for="terms-check" class="terms-label">I've read and agree to <a href="#">Terms & Conditions</a></label>
+                </div>
+            </div>
+            <div class="input-box">
+                <input type="submit" class="submit" value="Register">
+            </div>
+            <div class="bottom-text">
+                <span>Already have an quotebook?<a href="#" onclick="login()">Login</a></span>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function myMenuFunction() {
+        var navMenu = document.getElementById("navMenu");
+        navMenu.classList.toggle("responsive");
+    }
+
+    function login() {
+        document.getElementById("login").style.left = "4px";
+        document.getElementById("register").style.right = "-520px";
+        document.getElementById("loginBtn").classList.add("white-btn");
+        document.getElementById("registerBtn").classList.remove("white-btn");
+        document.getElementById("login").style.opacity = 1;
+        document.getElementById("register").style.opacity = 0;
+    }
+
+    function register() {
+        document.getElementById("login").style.left = "-510px";
+        document.getElementById("register").style.right = "5px";
+        document.getElementById("loginBtn").classList.remove("white-btn");
+        document.getElementById("registerBtn").classList.add("white-btn");
+        document.getElementById("login").style.opacity = 0;
+        document.getElementById("register").style.opacity = 1;
+    }
+
+    // Password match validation
+    document.getElementById("register").addEventListener("submit", function(event) {
+        var password = document.getElementById("register-password").value;
+        var confirmPassword = document.getElementById("confirm-password").value;
+        var errorElement = document.getElementById("password-error");
+
+        if (password !== confirmPassword) {
+            errorElement.style.display = "block";
+            event.preventDefault(); // Prevent form submission
+        } else {
+            errorElement.style.display = "none";
+        }
+    });
+</script>
+
+
+</body>
+</html>
