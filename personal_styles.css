@@ -1,0 +1,272 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    /* url("/Users/angiela/www/images/notebook.jpg") */
+    background-image: #fbebc5;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+/* 
+.wrapper{
+    margin:50px;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, 250px);
+}
+
+.wrapper ul{
+    list-style: none;
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, 250px);
+}
+
+.wrapper li{
+    height: 250px;
+    background: white;
+    border-radius: 5px;
+    padding: 15px 20px 20px;
+}
+
+.wrapper .quote{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.addBox,
+.icon,
+.bottom-content,
+.settings .menu li,
+.content header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.addBox{
+    flex-direction: column;
+    justify-content: center;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.quote .detail{
+    max-height: 165px;
+    overflow-y: auto;
+}
+
+.quote p{
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.quote span{
+    display: block;
+    margin-top: 5px;
+    font-size: 16px;
+}
+
+.quote .bottom-content{
+    padding-top: 10px;
+    border-top: 1px solid grey;
+}
+.bottom-content span {
+    color: grey;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.bottom-content .settings i {
+    cursor: pointer;
+}
+
+.settings {
+    position: relative;
+} */
+
+/* 
+.settings .menu {
+    border-radius: 4px;
+    position: absolute;
+    bottom: 0;
+    transform: scale(0);
+    transform-origin: bottom right;
+    transition: transform 0.2s ease;
+    right: -5px;
+    padding: 5px 0;
+    background-color: white;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+.settings.show .menu {
+    transform: scale(1);
+}
+
+.settings .menu li {
+    height: 25px;
+    cursor: pointer;
+    padding: 17px 15px;
+    border-radius: 0;
+    justify-content: flex-start;
+}
+
+.menu li:hover {
+    background: #f5f5f5;
+}
+
+.menu li i {
+    padding-right: 8px;
+}
+
+.popupBox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.popupBox,
+.popupBox .popupShow {
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+}
+
+.popupBox.show,
+.popupBox.show .popupShow {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.popupBox .popupShow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    max-width: 400px;
+    width: 100%;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+}
+
+.popupShow .content {
+    border-radius: 5px;
+    background: #fff;
+}
+
+.popupShow .content header {
+    padding: 15px 25px;
+    border-bottom: 1px solid #ccc;
+}
+
+.content header i {
+    color: pink;
+    cursor: pointer;
+}
+
+.content form {
+    margin: 15px 25px 35px;
+}
+
+.content form :where(input, textarea) {
+    width: 100%;
+    height: 50px;
+    padding: 0 15px;
+    border-radius: 4px;
+    border: #ccc 1px solid;
+}
+
+.content form .row {
+    margin-bottom: 20px;
+}
+
+.content form textarea {
+    height: 150px;
+    resize: none;
+}
+
+.content form button {
+    width: 100%;
+    height: 50px;
+    background-color: rgba(255, 255, 255, 0.4);
+    cursor: pointer;
+    color: #000000;
+    margin: px 0;
+    border-radius: 4px;
+}
+
+form .row label {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.login-container{
+    position: absolute;
+    left: 4px;
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+    transition: .5s ease-in-out;
+} */
+
+.ang_button {
+    background-color: #eed7a6;
+    border-radius: 10px;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+input{
+    border-radius: 25px;
+    padding: 10px;
+    border: 2px;
+    width: 250px;
+}
+
+.quote_boxes{
+    position: relative;
+    background-color: #d6cdb3;
+    color: rgb(1, 1, 1);
+    border-radius: 10px;
+    /* padding: 40px 30px; */
+    text-align: center;
+    font-size: 25px;
+    margin: 10px 130px;
+    font-family: "Garamond";
+}
+
+.new_acc{
+    position: relative;
+    background-color: #f9e261;
+    color: rgb(1, 1, 1);
+    border-radius: 10px;
+    /* padding: 40px 30px; */
+    text-align: center;
+    font-size: 25px;
+    margin: 10px 130px;
+    font-family: "Times New Roman";
+}
