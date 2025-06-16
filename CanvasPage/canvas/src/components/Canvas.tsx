@@ -766,8 +766,7 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
       <div className="absolute bottom-4 left-4 flex items-end gap-2">
         {/* Zoom Controls */}
         <div className="flex items-center gap-1 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border border-border rounded-lg p-1 shadow-lg">
-          //zoom in and out button
-          <Button
+          <Button //zoom in and out button
             variant="ghost"
             size="sm"
             className="h-6 w-6 p-0"
