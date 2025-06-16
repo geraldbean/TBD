@@ -126,7 +126,7 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
     redrawCanvas(ctx);
   }, [elements, zoom, panOffset, darkMode, selectedElement]);
 
-  //use mouse wheel for zoom
+  //use mouse wheel for zoom in and out
   useEffect(() => {
   const handleWheel = (e: WheelEvent) => {
     if (e.ctrlKey) {
@@ -626,6 +626,8 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
     }
   };
 
+  //bug fixed, handle zoom in/out with offset + panning
+  //June 15th, 2025
   const handleZoom = (delta: number, zoomCenter?: { x: number, y: number }) => {
     const newZoom = Math.max(0.1, Math.min(5, zoom + delta));
     const canvas = canvasRef.current;
@@ -764,10 +766,13 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
       <div className="absolute bottom-4 left-4 flex items-end gap-2">
         {/* Zoom Controls */}
         <div className="flex items-center gap-1 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm border border-border rounded-lg p-1 shadow-lg">
+          //zoom in and out button
           <Button
             variant="ghost"
             size="sm"
             className="h-6 w-6 p-0"
+            //zoom out by reducing by 0.1
+            //divide by 2 both width and height to zoom towards center of page instead of (0,0)
             onClick={(e) => handleZoom(-0.1, { x: window.innerWidth / 2, y: window.innerHeight / 2 })}
           >
             <ZoomOut className="w-3 h-3" />
@@ -777,6 +782,7 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
             variant="ghost"
             size="sm"
             className="h-6 w-6 p-0"
+            //same functionality
             onClick={(e) => handleZoom(0.1, { x: window.innerWidth / 2, y: window.innerHeight / 2 })}
           >
             <ZoomIn className="w-3 h-3" />
