@@ -51,6 +51,22 @@ function getSvgPathFromStroke(points: number[][], closed = true) {
   return closed ? result + "Z" : result;
 }
 
+//get canvas coords
+const getCanvasMouseCoords = (
+  e: MouseEvent | React.MouseEvent,
+  canvasRef: React.RefObject<HTMLCanvasElement>,
+  panOffset: { x: number; y: number },
+  zoom: number
+) => {
+  const canvas = canvasRef.current;
+  if (!canvas) return { x: 0, y: 0 };
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left - panOffset.x) / zoom;
+  const y = (e.clientY - rect.top - panOffset.y) / zoom;
+  return { x, y };
+};
+
+
 const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -325,7 +341,9 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const pos = getMousePos(e);
+    //need to account for pan or zoom offsets
+    const pos = getCanvasMouseCoords(e, canvasRef, panOffset, zoom); //this ensures positions are intepreted as canvas page, not screen page
+
     
     if (e.button === 1 || e.ctrlKey || activeTool === "pan") {
       setIsPanning(true);
@@ -392,7 +410,9 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const pos = getMousePos(e);
+    //need to account for zoom or pan offests
+    const pos = getCanvasMouseCoords(e, canvasRef, panOffset, zoom); //ensures intepretating canvas page not screen page
+
 
     // Update eraser position for visual feedback
     if (activeTool === "eraser") {
@@ -444,8 +464,17 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
         );
         const pathData = getSvgPathFromStroke(stroke, false);
         const path = new Path2D(pathData);
+
+        //apply zoom and pan transform so the live stroke matches final rendering
+        ctx.save(); //before translating, take a snapshot. Pushes the current drawing onto stack
+        //panoffset track how far user has dragged the view
+        //translate function: everything appears to move
+        ctx.translate(panOffset.x, panOffset.y); //move canvas' original position to a new position defined by panOffset
+        ctx.scale(zoom, zoom);
+        //render elements
         ctx.fillStyle = drawingSettings.color;
         ctx.fill(path);
+        ctx.restore(); //after translating, save. Pops the most recent saved state off the stack and restores it.
     }
 
     if (isDragging && selectedElement && activeTool === "select") {
@@ -781,14 +810,14 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
             variant="ghost"
             size="sm"
             className="h-6 w-6 p-0"
-            //same functionality
+            //same functionality 
             onClick={(e) => handleZoom(0.1, { x: window.innerWidth / 2, y: window.innerHeight / 2 })}
           >
             <ZoomIn className="w-3 h-3" />
           </Button>
           
           <div className="px-2 text-xs text-muted-foreground min-w-[35px] text-center">
-            {Math.round(zoom * 100)}%
+            {Math.round(zoom * 100)}% 
           </div>
         </div>
         
