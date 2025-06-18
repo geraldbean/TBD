@@ -61,6 +61,10 @@ const getCanvasMouseCoords = (
   const canvas = canvasRef.current;
   if (!canvas) return { x: 0, y: 0 };
   const rect = canvas.getBoundingClientRect();
+
+  //get mouse position relative the canvas
+  //subtract panoffset to correct for the pan
+  //1. translate screen to canvas-local space 2. subtract panning 3. divie by scaling to convert pixels into canvas-space undoing the zoom
   const x = (e.clientX - rect.left - panOffset.x) / zoom;
   const y = (e.clientY - rect.top - panOffset.y) / zoom;
   return { x, y };
@@ -184,7 +188,7 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
   const redrawCanvas = (ctx: CanvasRenderingContext2D) => {
     if (!ctx || !canvasRef.current) return;
     
-    ctx.save();
+    ctx.save(); 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const canvasStyle = darkMode ? '210 10% 12%' : '0 0% 100%';
     ctx.fillStyle = `hsl(${canvasStyle})`;
@@ -394,11 +398,11 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
         toast.success("Element erased!");
       }
     } else if (activeTool === "text") {
-      // Clear any existing text editing
+      //Clear any existing text editing
       setEditingText(null);
       setTextInput("");
       
-      // Start new text editing
+      //Start new text editing, sets up position
       const textId = `text-${Date.now()}`;
       setEditingText(textId);
       setTextPosition(pos);
@@ -466,11 +470,11 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
         const path = new Path2D(pathData);
 
         //apply zoom and pan transform so the live stroke matches final rendering
-        ctx.save(); //before translating, take a snapshot. Pushes the current drawing onto stack
+        ctx.save(); //before translating, take a snapshot. Pushes the current drawing onto stack. Used for undo/redo
         //panoffset track how far user has dragged the view
         //translate function: everything appears to move
         ctx.translate(panOffset.x, panOffset.y); //move canvas' original position to a new position defined by panOffset
-        ctx.scale(zoom, zoom);
+        ctx.scale(zoom, zoom); //scales to zoom level
         //render elements
         ctx.fillStyle = drawingSettings.color;
         ctx.fill(path);
@@ -709,10 +713,10 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
     }
     
     switch (activeTool) {
-      case "pencil": return "crosshair";
-      case "eraser": return "crosshair";
+     case "pencil": return "url('cursors/crosshair-plus-dot (2).svg') 9 7, crosshair"; //custom crosshair access in public, x  y, fallback to default 
+      case "eraser": return "url('cursors/dot-24 (1).svg') 0 0, crosshair";  
       case "text": return "text";
-      case "pan": return "grab";
+      case "pan": return "url('cursors/grab.svg') 0 0, grab";
       case "select": return isDragging ? "move" : "default";
       default: return "default";
     }
