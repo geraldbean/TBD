@@ -25,15 +25,15 @@ interface CanvasElement {
   editing?: boolean;
 }
 
-interface TextElement extends CanvasElement {
-  type: "text";
-  data: {
-    text: string;
-    color: string;
-    size: number;
-  };
-  editing?: boolean;
-}
+// interface TextElement extends CanvasElement {
+//   type: "text";
+//   data: {
+//     text: string;
+//     color: string;
+//     size: number;
+//   };
+//   editing?: boolean;
+// }
 
 function getSvgPathFromStroke(points: number[][], closed = true) {
   if (points.length < 4) return "";
@@ -71,6 +71,8 @@ const getCanvasMouseCoords = (
 };
 
 
+
+
 const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -84,9 +86,20 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
   const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
   const [lastPanPoint, setLastPanPoint] = useState({ x: 0, y: 0 });
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
-  const [editingText, setEditingText] = useState<string | null>(null);
-  const [textInput, setTextInput] = useState("");
-  const [textPosition, setTextPosition] = useState({ x: 0, y: 0 });
+  // const [editingText, setEditingText] = useState<string | null>(null);
+  // const [textInput, setTextInput] = useState("");
+  // const [textPosition, setTextPosition] = useState({ x: 0, y: 0 });
+
+  const [textInputState, setTextInputState] = useState<{
+    id: string;
+    x: number;
+    y: number;
+    value: string;
+  } | null>(null);
+
+  
+
+
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [resizeHandle, setResizeHandle] = useState<string | null>(null);
@@ -95,39 +108,89 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
   const [hoverHandle, setHoverHandle] = useState<string | null>(null);
 
   // Auto-resize textarea
-  const autoResizeTextarea = () => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      textarea.style.height = 'auto';
-      textarea.style.height = textarea.scrollHeight + 'px';
+  // const autoResizeTextarea = () => {
+  //   const textarea = textareaRef.current;
+  //   if (textarea) {
+  //     textarea.style.height = 'auto';
+  //     textarea.style.height = textarea.scrollHeight + 'px';
+  //   }
+  // };
+
+  // const handleTextInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  //   setTextInput(e.target.value);
+  //   autoResizeTextarea();
+  // };
+
+  // const handleTextAreaBlur = () => {
+  //   if (textInput.trim()) {
+  //     handleTextSubmit();
+  //   } else {
+  //     setEditingText(null);
+  //     setTextInput("");
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   if (editingText && textareaRef.current) {
+  //     const textarea = textareaRef.current;
+  //     setTimeout(() => {
+  //       textarea.focus();
+  //       autoResizeTextarea();
+  //       // Set cursor to end of text
+  //       textarea.setSelectionRange(textarea.value.length, textarea.value.length);
+  //     }, 10);
+  //   }
+  // }, [editingText]);
+
+ useEffect(() => {
+    if (textInputState && textareaRef.current) {
+      requestAnimationFrame(() => {
+        textareaRef.current?.focus();
+      });
     }
+  }, [textInputState]);
+
+
+const commitText = () => {
+  if (!textInputState) return;
+
+  const value = textInputState.value.trim();
+  if (value === "") {
+    setTextInputState(null);
+    return;
+  }
+
+  const updatedElements = [...elements];
+  const existingIndex = updatedElements.findIndex(
+    (el) => el.id === textInputState.id
+  );
+
+  const newElement: CanvasElement = {
+    id: textInputState.id,
+    type: "text",
+    x: textInputState.x,
+    y: textInputState.y,
+    data: {
+      text: value,
+      color: drawingSettings.color,
+      size: drawingSettings.size,
+    },
+    selected: false,
+    editing: false, //false when saving
   };
 
-  const handleTextInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextInput(e.target.value);
-    autoResizeTextarea();
-  };
+  if (existingIndex >= 0) {
+    updatedElements[existingIndex] = newElement;
+  } else {
+    updatedElements.push(newElement);
+  }
 
-  const handleTextAreaBlur = () => {
-    if (textInput.trim()) {
-      handleTextSubmit();
-    } else {
-      setEditingText(null);
-      setTextInput("");
-    }
-  };
+  setElements(updatedElements);
+  addToHistory(updatedElements);
+  setTextInputState(null);
+};
 
-  useEffect(() => {
-    if (editingText && textareaRef.current) {
-      const textarea = textareaRef.current;
-      setTimeout(() => {
-        textarea.focus();
-        autoResizeTextarea();
-        // Set cursor to end of text
-        textarea.setSelectionRange(textarea.value.length, textarea.value.length);
-      }, 10);
-    }
-  }, [editingText]);
+
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -212,15 +275,16 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
         ctx.fillStyle = element.data.color || "#000000";
         ctx.fill(path);
     } else if (element.type === "text" && !element.editing) {
-        ctx.fillStyle = element.data.color || "#000000";
-        ctx.font = `${element.data.size * 8}px Inter, sans-serif`;
-        ctx.textBaseline = "top";
-        
-        const lines = element.data.text.split('\n');
-        lines.forEach((line: string, index: number) => {
-          ctx.fillText(line, element.x, element.y + (index * element.data.size * 10));
-        });
-      }
+      ctx.fillStyle = element.data.color || "#000000";
+      ctx.font = `${element.data.size * 8}px Inter, sans-serif`;
+      ctx.textBaseline = "top";
+
+      const lines = element.data.text.split('\n');
+      lines.forEach((line: string, index: number) => {
+        ctx.fillText(line, element.x, element.y + (index * element.data.size * 10));
+      });
+    }
+
 
       // Draw selection box and handles
       if (element.selected && element.id === selectedElement) {
@@ -296,17 +360,6 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
     return { x: element.x, y: element.y, width: 100, height: 100 };
   };
 
-  const getMousePos = (e: React.MouseEvent<HTMLCanvasElement>) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return { x: 0, y: 0 };
-    
-    const rect = canvas.getBoundingClientRect();
-    return {
-      x: (e.clientX - rect.left - panOffset.x) / zoom,
-      y: (e.clientY - rect.top - panOffset.y) / zoom,
-    };
-  };
-
   const getElementAtPosition = (pos: { x: number; y: number }) => {
     for (let i = elements.length - 1; i >= 0; i--) {
       const element = elements[i];
@@ -345,6 +398,7 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    commitText();
     //need to account for pan or zoom offsets
     const pos = getCanvasMouseCoords(e, canvasRef, panOffset, zoom); //this ensures positions are intepreted as canvas page, not screen page
 
@@ -369,10 +423,21 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
         
         // Double-click to edit text or start dragging
         if (element.type === "text") {
-          setEditingText(element.id);
-          setTextInput(element.data.text);
-          setTextPosition({ x: element.x, y: element.y });
-          setElements(prev => prev.map(el => ({ ...el, selected: false, editing: el.id === element.id })));
+          setTextInputState({
+          id: element.id,
+          x: element.x,
+          y: element.y,
+          value: element.data.text,
+      });
+
+        //mark only this element editing flag = true
+        setElements((prev) => //only the one being edited is hidden
+          prev.map((el) =>
+            el.id === element.id
+              ? { ...el, editing: true }
+              : { ...el, editing: false }
+          )
+        );
         } else {
           setIsDragging(true);
           setDragStart(pos);
@@ -398,20 +463,29 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
         toast.success("Element erased!");
       }
     } else if (activeTool === "text") {
-      //Clear any existing text editing
-      setEditingText(null);
-      setTextInput("");
-      
-      //Start new text editing, sets up position
-      const textId = `text-${Date.now()}`;
-      setEditingText(textId);
-      setTextPosition(pos);
-      setTextInput("");
-      
-      console.log("Text tool clicked at position:", pos);
-      console.log("Editing text ID:", textId);
+      const existing = getElementAtPosition(pos);
+      if (existing?.type === "text") {
+        setTextInputState({
+          id: existing.id,
+          x: existing.x,
+          y: existing.y,
+          value: existing.data.text,
+        });
+        return;
+      }
+
+      const newId = `text-${Date.now()}`;
+      setTextInputState({
+        id: newId,
+        x: pos.x,
+        y: pos.y,
+        value: "",
+      });
     }
+
+
   };
+
 
   const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
     //need to account for zoom or pan offests
@@ -598,66 +672,66 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
     }
   };
 
-  const handleTextSubmit = () => {
-    if (textInput.trim() && editingText) {
-      // Check if we're editing existing text
-      const existingElementIndex = elements.findIndex(el => el.id === editingText);
+  // const handleTextSubmit = () => {
+  //   if (textInput.trim() && editingText) {
+  //     // Check if we're editing existing text
+  //     const existingElementIndex = elements.findIndex(el => el.id === editingText);
       
-      if (existingElementIndex >= 0) {
-        // Update existing text element
-        const newElements = [...elements];
-        newElements[existingElementIndex] = {
-          ...newElements[existingElementIndex],
-          data: {
-            text: textInput,
-            color: drawingSettings.color,
-            size: drawingSettings.size,
-          },
-          editing: false,
-        };
-        setElements(newElements);
-        addToHistory(newElements);
-      } else {
-        // Create new text element
-        const newElement: CanvasElement = {
-          id: editingText,
-          type: "text",
-          data: {
-            text: textInput,
-            color: drawingSettings.color,
-            size: drawingSettings.size,
-          },
-          x: textPosition.x,
-          y: textPosition.y,
-          editing: false,
-        };
-        const newElements = [...elements, newElement];
-        setElements(newElements);
-        addToHistory(newElements);
-      }
+  //     if (existingElementIndex >= 0) {
+  //       // Update existing text element
+  //       const newElements = [...elements];
+  //       newElements[existingElementIndex] = {
+  //         ...newElements[existingElementIndex],
+  //         data: {
+  //           text: textInput,
+  //           color: drawingSettings.color,
+  //           size: drawingSettings.size,
+  //         },
+  //         editing: false,
+  //       };
+  //       setElements(newElements);
+  //       addToHistory(newElements);
+  //     } else {
+  //       // Create new text element
+  //       const newElement: CanvasElement = {
+  //         id: editingText,
+  //         type: "text",
+  //         data: {
+  //           text: textInput,
+  //           color: drawingSettings.color,
+  //           size: drawingSettings.size,
+  //         },
+  //         x: textPosition.x,
+  //         y: textPosition.y,
+  //         editing: false,
+  //       };
+  //       const newElements = [...elements, newElement];
+  //       setElements(newElements);
+  //       addToHistory(newElements);
+  //     }
       
-      setEditingText(null);
-      setTextInput("");
-      toast.success("Text saved!");
-    } else {
-      // Cancel editing if no text
-      setEditingText(null);
-      setTextInput("");
-    }
-  };
+  //     setEditingText(null);
+  //     setTextInput("");
+  //     toast.success("Text saved!");
+  //   } else {
+  //     // Cancel editing if no text
+  //     setEditingText(null);
+  //     setTextInput("");
+  //   }
+  // };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && e.shiftKey) {
-      // Allow line break with Shift+Enter
-      return;
-    } else if (e.key === "Enter") {
-      e.preventDefault();
-      handleTextSubmit();
-    } else if (e.key === "Escape") {
-      setEditingText(null);
-      setTextInput("");
-    }
-  };
+  // const handleKeyDown = (e: React.KeyboardEvent) => {
+  //   if (e.key === "Enter" && e.shiftKey) {
+  //     // Allow line break with Shift+Enter
+  //     return;
+  //   } else if (e.key === "Enter") {
+  //     e.preventDefault();
+  //     handleTextSubmit();
+  //   } else if (e.key === "Escape") {
+  //     setEditingText(null);
+  //     setTextInput("");
+  //   }
+  // };
 
   //bug fixed, handle zoom in/out with offset + panning
   //June 15th, 2025
@@ -716,7 +790,7 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
      case "pencil": return "url('cursors/crosshair-plus-dot (2).svg') 9 7, crosshair"; //custom crosshair access in public, x  y, fallback to default 
       case "eraser": return "url('cursors/dot-24 (1).svg') 0 0, crosshair";  
       case "text": return "text";
-      case "pan": return "url('cursors/grab.svg') 0 0, grab";
+      case "pan": return "url('cursors/grab.svg') 0 0, grab"; 
       case "select": return isDragging ? "move" : "default";
       default: return "default";
     }
@@ -762,38 +836,51 @@ const Canvas = ({ activeTool, drawingSettings, darkMode, onOpenHelp }: CanvasPro
       )}
 
       {/* Text Input */}
-      {editingText && (
-        <div
-          className="absolute z-50 pointer-events-auto bg-transparent"
-          style={{
-            left: Math.max(10, textPosition.x * zoom + panOffset.x),
-            top: Math.max(10, textPosition.y * zoom + panOffset.y),
-            minWidth: '200px',
+      {textInputState && (
+        <textarea
+          ref={textareaRef}
+          value={textInputState.value}
+          onChange={(e) =>
+            setTextInputState((prev) =>
+              prev ? { ...prev, value: e.target.value } : null
+            )
+          }
+          onInput={(e) => {
+            const el = e.currentTarget;
+            el.style.height = "auto";
+            el.style.height = `${el.scrollHeight}px`;
           }}
-        >
-          <textarea
-            ref={textareaRef}
-            value={textInput}
-            onChange={handleTextInputChange}
-            onKeyDown={handleKeyDown}
-            onBlur={handleTextAreaBlur}
-            placeholder="Type your text..."
-            className="resize-none border-2 border-blue-500 bg-white dark:bg-gray-800 text-foreground placeholder:text-muted-foreground rounded px-2 py-1 outline-none shadow-lg"
-            style={{
-              fontSize: `${Math.max(12, drawingSettings.size * 8)}px`,
-              color: drawingSettings.color,
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word',
-              fontFamily: 'Inter, sans-serif',
-              minWidth: '200px',
-              minHeight: `${Math.max(30, drawingSettings.size * 8 + 20)}px`,
-              overflow: 'hidden',
-              lineHeight: '1.25',
-            }}
-            autoFocus
-          />
-        </div>
+          onBlur={commitText}
+          className="absolute z-50 resize-none bg-transparent border-none outline-none text-black dark:text-white"
+          style={{
+            left: textInputState.x * zoom + panOffset.x,
+            top: textInputState.y * zoom + panOffset.y,
+            font: `${drawingSettings.size * 8 * zoom}px sans-serif`,
+            margin: 0,
+            padding: 0,
+            border: 0,
+            outline: 0,
+            resize: "both", // freely resize text area
+            overflow: "hidden",
+            whiteSpace: "pre-wrap", //long sentence wrap as paragraphs
+            wordWrap: "break-word", //prevent single long line from overflowing
+            background: "transparent",
+            color: drawingSettings.color,
+            zIndex: 2,
+          }}
+
+          onKeyDown={(e) => { //escape also commit text if user typed
+            if (e.key === "Escape" && !e.shiftKey) {
+              e.preventDefault();
+              commitText();
+            } 
+          }}
+
+        />
+
       )}
+
+
 
       {/* Canvas Controls - Bottom */}
       <div className="absolute bottom-4 left-4 flex items-end gap-2">
