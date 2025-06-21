@@ -29,7 +29,7 @@ const QuoteInput = ({ onSave, onCancel }: QuoteInputProps) => {
     };
 
     try {
-      const response = await fetch("/personal_page.php", {
+      const response = await fetch("http://localhost/Quotebook/personal_page.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,6 +55,7 @@ const QuoteInput = ({ onSave, onCancel }: QuoteInputProps) => {
     alert("Please fill in both the quote and the who_said_it.");
   }
 };
+
 
 
   return (
@@ -102,3 +103,35 @@ const QuoteInput = ({ onSave, onCancel }: QuoteInputProps) => {
 };
 
 export default QuoteInput;
+
+
+// <?php
+// session_start();
+// include 'db_connection.php';
+// include 'login_check.php';
+
+// header("Access-Control-Allow-Origin: *");
+// header("Content-Type: application/json");
+
+// // Fetch quotes only for the logged-in user
+// $sql = $con->prepare("SELECT quote_id, quote_entered, who_said_it, timestamp FROM quote WHERE user_id = ?");
+// $sql->bind_param("i", $uid);
+// $sql->execute();
+
+// $result = $sql->get_result();
+// $quotes = [];
+
+// while ($row = $result->fetch_assoc()) {
+//     $quotes[] = [
+//         "id" => $row['quote_id'],
+//         "quote_entered" => $row['quote_entered'],
+//         "who_said_it" => $row['who_said_it'],
+//         "timestamp" => $row['timestamp']
+//     ];
+// }
+
+// echo json_encode($quotes);
+
+// $sql->close();
+// $con->close();
+// ?>
