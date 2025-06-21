@@ -26,7 +26,7 @@ const Index = () => {
 
   useEffect(() => {
   fetch("/personal_page.php")
-    .then((res) => res.json())
+     .then((res) => res.json())
     .then((data) => {
       const formattedQuotes = data.map((q: any) => ({
         ...q,
