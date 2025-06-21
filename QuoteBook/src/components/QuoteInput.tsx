@@ -29,7 +29,7 @@ const QuoteInput = ({ onSave, onCancel }: QuoteInputProps) => {
     };
 
     try {
-      const response = await fetch("http://localhost/Quotebook/personal_page.php", {
+      const response = await fetch("http://localhost/Quotebook/adding_personal_page.php", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
