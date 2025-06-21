@@ -26,10 +26,19 @@ const Index = () => {
 
   useEffect(() => {
   fetch("/personal_page.php")
-    .then(res => res.json())
-    .then(data => setQuotes(data))
-    .catch(err => console.error("Error loading quotes:", err));
+    .then((res) => res.json())
+    .then((data) => {
+      const formattedQuotes = data.map((q: any) => ({
+        ...q,
+        id: q.id.toString(),
+        timestamp: new Date(q.timestamp),
+        backgroundColor: "#ffffff",
+      }));
+      setQuotes(formattedQuotes);
+    })
+    .catch((err) => console.error("Error loading quotes:", err));
 }, []);
+
 
 
   const handleSaveQuote = (quote: Quote) => {

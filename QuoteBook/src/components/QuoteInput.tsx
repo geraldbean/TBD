@@ -21,22 +21,41 @@ const QuoteInput = ({ onSave, onCancel }: QuoteInputProps) => {
   const [quote_entered, setText] = useState("");
   const [who_said_it, setAuthor] = useState("");
 
-  const handleSave = () => {
-    if (quote_entered.trim() && who_said_it.trim()) {
-      const newQuote: Quote = {
-        id: crypto.randomUUID(),
-        quote_entered: quote_entered.trim(),
-        who_said_it: who_said_it.trim(),
-        timestamp: new Date(),
-        backgroundColor: '#ffffff',
-      };
-      onSave(newQuote);
+  const handleSave = async () => {
+  if (quote_entered.trim() && who_said_it.trim()) {
+    const newQuote = {
+      quote_entered: quote_entered.trim(),
+      who_said_it: who_said_it.trim(),
+    };
+
+    try {
+      const response = await fetch("/personal_page.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newQuote),
+      });
+
+      const savedQuote = await response.json();
+      onSave({
+        id: savedQuote.id,
+        quote_entered: savedQuote.quote_entered,
+        who_said_it: savedQuote.who_said_it,
+        timestamp: new Date(savedQuote.timestamp),
+        backgroundColor: "#ffffff",
+      });
+
       setText("");
       setAuthor("");
-    } else {
-      alert("Please fill in both the quote and the who_said_it.");
+    } catch (err) {
+      alert("Failed to save quote");
     }
-  };
+  } else {
+    alert("Please fill in both the quote and the who_said_it.");
+  }
+};
+
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-md shadow-md p-6">
