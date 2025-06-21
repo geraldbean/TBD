@@ -1,0 +1,181 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    /* url("/Users/angiela/www/images/notebook.jpg") */
+    background-image: #fbebc5;
+
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+}
+
+.ang_button {
+    background-color: #eed7a6;
+    border-radius: 10px;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+input{
+    border-radius: 25px;
+    padding: 10px;
+    border: 2px;
+    width: 250px;
+}
+
+.quote_boxes {
+    position: relative;
+    background-color: #82acdd;
+    color: rgb(1, 1, 1);
+    border-radius: 10px;
+    padding: 20px 40px 30px 30px;
+    text-align: center;
+    font-size: 25px;
+    margin: 10px 130px;
+    font-family: "Garamond";
+}
+
+
+.squote_boxes {
+    position: relative;
+    background-color: #c9a9d2;
+    color: rgb(1, 1, 1);
+    border-radius: 10px;
+    padding: 20px 40px 30px 30px;
+    text-align: center;
+    font-size: 25px;
+    margin: 10px 130px;
+    font-family: "Garamond";
+}
+
+.quote_box_delete{
+    position: absolute;
+    top: 60px;
+    right: 5px;
+    background-color: rgb(237, 148, 132);
+    color: white;
+    border: none;
+    border-radius: 40%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 25px;
+    text-align: center;
+    padding: 0;
+}
+
+.quote_box_delete:hover{
+    background-color: #73d7ff;
+}
+
+.delete_icon{
+    width:20px;
+    height:20px;
+}
+
+.add_friend{
+    position: absolute;
+    top: 60px;
+    right: 60px;
+    background-color: #7cb4f4;
+    color: white;
+    border: none;
+    border-radius: 40%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 25px;
+    text-align: center;
+    padding: 0;
+}
+
+.add_friend:hover{
+    background-color: #73d7ff;
+}
+
+.add_friend_icon{
+    width:20px;
+    height:20px;
+}
+
+.new_acc{
+    position: relative;
+    background-color: #73d7ff;
+    color: rgb(1, 1, 1);
+    border-radius: 10px;
+    /* padding: 40px 30px; */
+    text-align: center;
+    font-size: 25px;
+    margin: 10px 130px;
+    font-family: "Times New Roman";
+}
+
+.add_quote{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #2c87ee;
+    color: white;
+    border: none;
+    border-radius: 40%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 40px;
+    line-height: 50px;
+    text-align: center;
+    padding: 0;
+}
+
+.add_quote:hover{
+    background-color: #73d7ff;
+}
+
+.add_quote_icon{
+    width:30px;
+    height:30px;
+}
+
+.textbox{
+    position: relative;
+    top: -35px;
+    left: 17px;
+    color: #fff;
+}
+
+
+/* trying to style the friend search results to be buttons so you can add the connection */
+.friend_button{
+    position: relative;
+    background-color: #abd4f2;
+    border-radius: 15%;
+    width: 100px;
+    height: 50px;
+    cursor: pointer;
+    font-size: 15px;
+    line-height: 10px;
+    text-align: center;
+    padding: 5px;
+}
+
+.friend_button:hover{
+    background-color: #73d7ff;
+}
+
