@@ -112,26 +112,39 @@ export default QuoteInput;
 
 // header("Access-Control-Allow-Origin: *");
 // header("Content-Type: application/json");
+// header("Access-Control-Allow-Headers: Content-Type");
 
-// // Fetch quotes only for the logged-in user
-// $sql = $con->prepare("SELECT quote_id, quote_entered, who_said_it, timestamp FROM quote WHERE user_id = ?");
-// $sql->bind_param("i", $uid);
-// $sql->execute();
+// // Accept JSON data from fetch
+// $data = json_decode(file_get_contents("php://input"), true);
 
-// $result = $sql->get_result();
-// $quotes = [];
-
-// while ($row = $result->fetch_assoc()) {
-//     $quotes[] = [
-//         "id" => $row['quote_id'],
-//         "quote_entered" => $row['quote_entered'],
-//         "who_said_it" => $row['who_said_it'],
-//         "timestamp" => $row['timestamp']
-//     ];
+// if (!isset($data['quote_entered'], $data['who_said_it'])) {
+//     http_response_code(400);
+//     echo json_encode(["error" => "Missing quote_entered or who_said_it"]);
+//     exit;
 // }
 
-// echo json_encode($quotes);
+// $quote = $data['quote_entered'];
+// $source = $data['who_said_it'];
+
+// // Prepare SQL
+// $sql = $con->prepare("INSERT INTO quote(quote_entered, who_said_it, user_id) VALUES (?, ?, ?)");
+// $sql->bind_param("ssi", $quote, $source, $uid);
+
+// // Execute
+// if ($sql->execute()) {
+//     echo json_encode([
+//         "success" => true,
+//         "id" => $con->insert_id,
+//         "quote_entered" => $quote,
+//         "who_said_it" => $source,
+//         "timestamp" => date("Y-m-d H:i:s")
+//     ]);
+// } else {
+//     http_response_code(500);
+//     echo json_encode(["error" => $sql->error]);
+// }
 
 // $sql->close();
 // $con->close();
 // ?>
+
