@@ -24,6 +24,14 @@ const Index = () => {
     }
   }, [isDarkMode]);
 
+  useEffect(() => {
+  fetch("/personal_page.php")
+    .then(res => res.json())
+    .then(data => setQuotes(data))
+    .catch(err => console.error("Error loading quotes:", err));
+}, []);
+
+
   const handleSaveQuote = (quote: Quote) => {
     setQuotes(prev => [quote, ...prev]);
     setShowQuoteInput(false);
