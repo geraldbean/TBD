@@ -25,10 +25,14 @@ interface QuoteCardProps {
   onDelete: (id: string) => void;
 }
 
+//display function(displaying on a card(textbox))
 const QuoteCard = ({ quote, onEdit, onDelete }: QuoteCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editText, setEditText] = useState(quote.text);
-  const [editAuthor, setEditAuthor] = useState(quote.author);
+
+  //quote_entered: user input
+  const [editText, setEditText] = useState(quote.quote_entered);
+  //who_said_it: author
+  const [editAuthor, setEditAuthor] = useState(quote.who_said_it);
   const [showColorPicker, setShowColorPicker] = useState(false);
 
   const colors = [
@@ -48,7 +52,8 @@ const QuoteCard = ({ quote, onEdit, onDelete }: QuoteCardProps) => {
   };
 
   const handleEdit = () => {
-    onEdit(quote.id, { text: editText, author: editAuthor });
+    onEdit(quote.id, { quote_entered: editText, who_said_it: editAuthor }); //saving edited quote also changes from php table
+
     setIsEditing(false);
   };
 
@@ -96,10 +101,10 @@ const QuoteCard = ({ quote, onEdit, onDelete }: QuoteCardProps) => {
           </div>
 
           <blockquote className="text-lg leading-relaxed text-gray-800 italic mb-4 pr-8">
-            "{quote.text}"
+            "{quote.quote_entered}"
           </blockquote>
           <div className="flex justify-between items-center text-sm text-gray-600">
-            <cite className="font-medium">— {quote.author}</cite>
+            <cite className="font-medium">— {quote.who_said_it}</cite>
             <time className="text-gray-400">{formatDate(quote.timestamp)}</time>
           </div>
         </CardContent>

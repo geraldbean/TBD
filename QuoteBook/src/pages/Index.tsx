@@ -24,10 +24,34 @@ const Index = () => {
     }
   }, [isDarkMode]);
 
-  const handleSaveQuote = (quote: Quote) => {
-    setQuotes(prev => [quote, ...prev]);
-    setShowQuoteInput(false);
+  //fetch
+  useEffect(() => {
+  fetch("http://localhost/Quotebook/get_quotes.php")
+    .then((res) => res.json())
+    .then((data) => {
+      setQuotes(data.map((q: any) => ({ //quote is map into this format
+        ...q,
+        id: q.id.toString(),
+        timestamp: new Date(q.timestamp),
+        backgroundColor: "#ffffff",
+      })));
+    })
+    .catch((err) => console.error("Error loading quotes:", err)); //for debugging
+}, []);
+
+
+  const handleSaveQuote = (quote: any) => {
+  const formattedQuote = {
+    ...quote,
+    id: quote.id.toString(),
+    timestamp: new Date(quote.timestamp),
+    backgroundColor: "#ffffff",
   };
+
+  setQuotes(prev => [formattedQuote, ...prev]);
+  setShowQuoteInput(false);
+};
+  
 
   const handleAddQuote = () => {
     setShowQuoteInput(true);
@@ -54,11 +78,17 @@ const Index = () => {
   const toggleSidebar = () => {
     setSidebarCollapsed(!sidebarCollapsed);
   };
+  
 
-  const filteredQuotes = quotes.filter(quote => 
-    quote.text.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    quote.author.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  //render quoteCard for quotes onto page
+ const filteredQuotes = quotes.filter(quote =>
+  //quote.entered
+  quote.quote_entered.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //who_said_it
+  quote.who_said_it.toLowerCase().includes(searchTerm.toLowerCase())
+
+);
+
 
   return (
     <div className="min-h-screen flex w-full bg-background dark:bg-gray-900">
