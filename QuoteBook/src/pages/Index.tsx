@@ -27,12 +27,12 @@ const Index = () => {
   //fetch
   useEffect(() => {
   fetch("http://localhost/Quotebook/get_quotes.php")
-    .then((res) => res.json())
+    .then((res) => res.json()) //sending json data
     .then((data) => {
       setQuotes(data.map((q: any) => ({ //quote is map into this format
         ...q,
-        id: q.id.toString(),
-        timestamp: new Date(q.timestamp),
+        id: q.quote_id.toString(),
+        timestamp: new Date(q.date),
         backgroundColor: "#ffffff",
       })));
     })
@@ -43,8 +43,8 @@ const Index = () => {
   const handleSaveQuote = (quote: any) => {
   const formattedQuote = {
     ...quote,
-    id: quote.id.toString(),
-    timestamp: new Date(quote.timestamp),
+    id: quote.quote_id.toString(),
+    timestamp: new Date(quote.date),
     backgroundColor: "#ffffff",
   };
 
@@ -67,9 +67,28 @@ const Index = () => {
     ));
   };
 
-  const handleDeleteQuote = (id: string) => {
-    setQuotes(prev => prev.filter(quote => quote.id !== id));
-  };
+  const handleDeleteQuote = async (id: string) => {
+  try {
+    const response = await fetch("http://localhost/Quotebook/delete_quote.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", //sending json data
+      },
+      body: JSON.stringify({ quote_id: Number(id) }), //convert id numeber and send it as quote_id
+    });
+
+    const data = await response.json(); //wait for response, parse json response from server, then...
+    
+    if (data.success) { //if delete was successfull
+      //update frontend to remove the quote from screen
+      setQuotes(prev => prev.filter(quote => quote.id !== id));
+    } else { //else log error
+      console.error("Delete failed:", data.error);
+    }
+  } catch (error) { //unexpected error
+    console.error("Error deleting quote:", error);
+  }
+};
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);

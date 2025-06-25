@@ -52,17 +52,17 @@ const QuoteCard = ({ quote, onEdit, onDelete }: QuoteCardProps) => {
   };
 
   const handleEdit = () => {
-    onEdit(quote.id, { quote_entered: editText, who_said_it: editAuthor }); //saving edited quote also changes from php table
+    onEdit(quote.quote_id, { quote_entered: editText, who_said_it: editAuthor }); //saving edited quote also changes from php table
 
     setIsEditing(false);
   };
 
   const handleDelete = () => {
-    onDelete(quote.id);
+    onDelete(quote.quote_id);
   };
 
   const handleColorChange = (color: string) => {
-    onEdit(quote.id, { backgroundColor: color });
+    onEdit(quote.quote_id, { backgroundColor: color });
     setShowColorPicker(false);
   };
 
@@ -105,7 +105,7 @@ const QuoteCard = ({ quote, onEdit, onDelete }: QuoteCardProps) => {
           </blockquote>
           <div className="flex justify-between items-center text-sm text-gray-600">
             <cite className="font-medium">— {quote.who_said_it}</cite>
-            <time className="text-gray-400">{formatDate(quote.timestamp)}</time>
+            <time className="text-gray-400">{formatDate(quote.date)}</time>
           </div>
         </CardContent>
       </Card>

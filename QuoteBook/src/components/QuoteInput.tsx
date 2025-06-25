@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export interface Quote {
-  id: string;
+  quote_id: string;
   quote_entered: string;
   who_said_it: string;
-  timestamp: Date;
+  date: Date;
   backgroundColor?: string;
 }
 
@@ -42,10 +42,10 @@ const QuoteInput = ({ onSave, onCancel }: QuoteInputProps) => {
 
       //Pass the saved quote back to the parent component (Index.tsx)
       onSave({
-        id: savedQuote.id.toString(),
+        quote_id: savedQuote.quote_id.toString(),
         quote_entered: savedQuote.quote_entered,
         who_said_it: savedQuote.who_said_it,
-        timestamp: new Date(savedQuote.timestamp),
+        date: new Date(savedQuote.date),
         backgroundColor: "#ffffff", // optional default background
       });
 
