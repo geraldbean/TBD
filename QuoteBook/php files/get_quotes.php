@@ -1,5 +1,5 @@
 <?php
-//this file gets quotes input from user
+//this file fetches all quotes from the database and sends them to the frontend as JSON.
 include 'db_connection.php';
 //for assitance in debugging
 ini_set('display_errors', 1);

@@ -41,21 +41,51 @@ const QuoteCard = ({ quote, onEdit, onDelete }: QuoteCardProps) => {
     '#bfdbfe', '#a7f3d0', '#bbf7d0', '#fde68a', '#fed7d7'
   ];
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+  const formatDate = (timestamp: string | Date) => {
+    const date = new Date(timestamp); //convert UTC to local browser time
+
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
+};
+
+
+
+  const handleEdit = async () => {
+  try {
+    const res = await fetch("http://localhost/Quotebook/edit_quotes.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        quote_id: Number(quote.quote_id),
+        quote_entered: editText,
+        who_said_it: editAuthor,
+      })
     });
-  };
 
-  const handleEdit = () => {
-    onEdit(quote.quote_id, { quote_entered: editText, who_said_it: editAuthor }); //saving edited quote also changes from php table
+    const result = await res.json();
 
-    setIsEditing(false);
-  };
+    if (result.success) {
+      onEdit(quote.quote_id, {
+        quote_entered: editText,
+        who_said_it: editAuthor,
+      });
+      setIsEditing(false);
+    } else {
+      console.error("Edit failed:", result.error);
+    }
+  } catch (error) {
+    console.error("Edit error:", error);
+  }
+};
+
 
   const handleDelete = () => {
     onDelete(quote.quote_id);
