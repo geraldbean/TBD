@@ -91,10 +91,33 @@ const QuoteCard = ({ quote, onEdit, onDelete }: QuoteCardProps) => {
     onDelete(quote.quote_id);
   };
 
-  const handleColorChange = (color: string) => {
-    onEdit(quote.quote_id, { backgroundColor: color });
-    setShowColorPicker(false);
-  };
+  //changing background color of quote box
+  const handleColorChange = async (color: string) => {
+  try {
+    //Send a POST request to update_background.php with the selected color
+    const res = await fetch("http://localhost/Quotebook/update_background.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        quote_id: Number(quote.quote_id), //id sent as number
+        background_color: color //background color apply
+      })
+    });
+
+    const result = await res.json();
+
+    if (result.success) {
+      onEdit(quote.quote_id, { backgroundColor: color }); //Updates local state/display
+      setShowColorPicker(false);
+    } else {
+      console.error("Color update failed:", result.error);
+    }
+  } catch (error) {
+    console.error("Color update error:", error);
+  }
+};
 
   const backgroundColor = quote.backgroundColor || '#ffffff';
 

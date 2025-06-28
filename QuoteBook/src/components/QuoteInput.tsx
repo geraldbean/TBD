@@ -9,7 +9,7 @@ export interface Quote {
   quote_entered: string;
   who_said_it: string;
   date: Date;
-  backgroundColor?: string;
+  backgroundColor: string;
 }
 
 

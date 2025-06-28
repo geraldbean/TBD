@@ -33,7 +33,7 @@ const Index = () => {
         ...q,
         id: q.quote_id.toString(),
         timestamp: new Date(q.date),
-        backgroundColor: "#ffffff",
+        backgroundColor: q.backgroundColor || "#ffffff", //use DB background color if e, fallback default
       })));
     })
     .catch((err) => console.error("Error loading quotes:", err)); //for debugging
@@ -45,7 +45,7 @@ const Index = () => {
     ...quote,
     id: quote.quote_id.toString(),
     timestamp: new Date(quote.date),
-    backgroundColor: "#ffffff",
+    backgroundColor: quote.backgroundColor || "#ffffff", //use DB background color if e, fallback default
   };
 
   setQuotes(prev => [formattedQuote, ...prev]);

@@ -20,6 +20,7 @@ while ($row = $result->fetch_assoc()) {
         "quote_entered" => $row['quote_entered'],
         "who_said_it" => $row['who_said_it'],
         "date" => $row['date']
+        "backgroundColor" => $row['background_color'] ?? '#ffffff'
     ];
 }
 
