@@ -59,7 +59,8 @@ const QuoteSidebar = ({ isCollapsed, onToggleCollapse, onQuoteAdd, isDarkMode, o
   return (
     <div className={cn(
       "bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 flex flex-col h-screen fixed left-0 top-0 z-30",
-      isCollapsed ? "w-16" : "w-50"
+      isCollapsed ? "w-[64px]" : "w-[200px]" //match marginLeft values on index.tsx 
+
     )}>
       {/* Header with Logo and Title */}
       <div className="p-4 border-b border-gray-200 dark:border-gray-700">
@@ -77,10 +78,10 @@ const QuoteSidebar = ({ isCollapsed, onToggleCollapse, onQuoteAdd, isDarkMode, o
           )}
         </div>
       </div>
-      {/* Floating Collapse Button on Sidebar Edge (Smaller) */}
+      {/* Floating Collapse Button on Sidebar Edge */}
       <button
         onClick={onToggleCollapse}
-        className="absolute top-6 -right-2 z-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full p-0.5 shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+        className="absolute top-6 -right-2 z-40 bg-transparent border border-gray-300 dark:border-gray-600 rounded-full p-0.5 shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         aria-label={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
       >
         <ChevronLeft

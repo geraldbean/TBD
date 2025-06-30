@@ -158,7 +158,7 @@ const QuoteCard = ({ quote, onEdit, onDelete }: QuoteCardProps) => {
           </blockquote>
           <div className="flex justify-between items-center text-sm text-gray-600">
             <cite className="font-medium">— {quote.who_said_it}</cite>
-            <time className="text-gray-400">{formatDate(quote.date)}</time>
+            <time className="text-black">{formatDate(quote.date)}</time>
           </div>
         </CardContent>
       </Card>
