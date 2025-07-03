@@ -17,9 +17,9 @@ interface Friend {
 const Friends = () => {
   const navigate = useNavigate();
   const [friends, setFriends] = useState<Friend[]>([
-    { id: '1', name: 'Angie Ivanov', email: 'angie@example.com', status: 'online' },
-    { id: '2', name: 'Kat Goldberg', email: 'kat@example.com', status: 'offline' },
-    { id: '3', name: 'Bob Johnson', email: 'bob@example.com', status: 'online' },
+    { id: '1', name: 'Alice Johnson', email: 'alice@example.com', status: 'online' },
+    { id: '2', name: 'Bob Smith', email: 'bob@example.com', status: 'offline' },
+    { id: '3', name: 'Carol Davis', email: 'carol@example.com', status: 'online' },
   ]);
   const [searchTerm, setSearchTerm] = useState("");
 

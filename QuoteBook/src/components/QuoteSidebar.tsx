@@ -38,7 +38,7 @@ const QuoteSidebar = ({ isCollapsed, onToggleCollapse, onQuoteAdd, isDarkMode, o
 
   const handleSharedQuotesClick = () => {
     setActiveItem('shared-quotes');
-    // Keep for future functionality
+    navigate('/shared-quotes');
   };
 
   const handleQuoteBookClick = (book: string) => {
