@@ -204,7 +204,7 @@ const QuoteSidebar = ({ isCollapsed, onToggleCollapse, onQuoteAdd, isDarkMode, o
                 "h-4 w-4",
                 activeItem === 'shared-quotes' && "text-blue-600"
               )} />
-              Shared Quotes
+              Quoteboard
             </Button>
           </>
         )}
