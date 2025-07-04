@@ -81,8 +81,7 @@ const QuoteSidebar = ({ isCollapsed, onToggleCollapse, onQuoteAdd, isDarkMode, o
       {/* Floating Collapse Button on Sidebar Edge */}
       <button
         onClick={onToggleCollapse}
-        className="absolute top-6 -right-2 z-40 bg-transparent border border-gray-300 dark:border-gray-600 rounded-full p-0.5 shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition"
-        aria-label={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+        className="absolute top-9 -right-3 z-50 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full p-1 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700"
       >
         <ChevronLeft
           className={cn(

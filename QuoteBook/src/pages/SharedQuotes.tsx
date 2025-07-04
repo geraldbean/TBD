@@ -147,7 +147,7 @@ const SharedQuotes = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 ${isDarkMode ? 'dark' : ''}`}>
+    <div className={`min-h-screen bg-gray-50 dark:bg-gray-800 ${isDarkMode ? 'dark' : ''}`}>
       {/* Fixed Sidebar */}
       <div className={cn(
         "bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 flex flex-col h-screen fixed left-0 top-0 z-30",
@@ -173,7 +173,7 @@ const SharedQuotes = () => {
         {/* Floating Collapse Button on Sidebar Edge */}
         <button
           onClick={handleToggleCollapse}
-          className="absolute top-6 -right-2 z-40 bg-transparent border border-gray-300 dark:border-gray-600 rounded-full p-0.5 shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition"
+          className="absolute top-9 -right-3 z-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-full p-1 shadow-md hover:bg-gray-100 dark:hover:bg-gray-700"
           aria-label={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
           <ChevronLeft
@@ -190,7 +190,7 @@ const SharedQuotes = () => {
           <Button 
             className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-90 text-white flex items-center gap-2 justify-center"
           >
-            <Plus className="h-4 w-4" />
+            <Share className="h-4 w-4" />
             {!isCollapsed && "Share Quote"}
           </Button>
 
@@ -238,11 +238,11 @@ const SharedQuotes = () => {
       {/* Friends Sub-Sidebar */}
       {showFriends && (
         <div className={cn(
-          "bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 flex flex-col h-screen fixed top-0 z-40",
+          "bg-white dark:bg-gray-900   border-r border-gray-200 dark:border-gray-700 transition-all duration-300 flex flex-col h-screen fixed top-0 z-10",
           isCollapsed ? "left-[64px] w-[256px]" : "left-[200px] w-[256px]"
         )}>
           {/* Friends Header */}
-          <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
                 Friends
@@ -297,13 +297,10 @@ const SharedQuotes = () => {
           : (isCollapsed ? "ml-[64px]" : "ml-[200px]")
       )}>
         {/* Smaller Header */}
-        <div className="sticky top-0 z-10 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-6 py-4">
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-            Shared Quotes
+        <div className="sticky top-0 z-10 bg-gray-100 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-6 py-2 flex items-center justify-end shadow-sm h-12">
+          <h1 className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xl font-bold text-gray-900 dark:text-white">
+            Quoteboard
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            See what your friends are sharing today
-          </p>
         </div>
 
         {/* Quote Feed */}
